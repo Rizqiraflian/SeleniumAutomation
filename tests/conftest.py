@@ -58,3 +58,7 @@ def generate_employeeId():
     random_uuid = uuid.uuid4()
     # Convert UUID to string and get the first 4 characters
     return str(random_uuid)[:4]
+
+@pytest.fixture(scope="session")
+def universalPassword():
+    return "temp1234"
