@@ -1,12 +1,14 @@
 
 from selenium.webdriver.common.by import By
-from selenium_helpers import wait_for_element,logging,time
+from selenium_helpers import wait_for_element,logging,time,allure
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
 import time
 
-
+@allure.feature("Employee Module")
+@allure.story("Add Employee Data")
+@allure.severity(allure.severity_level.CRITICAL)
 def test_success_add_employee(login,generate_random_first_name,generate_random_middle_name,generate_random_last_name,generate_employeeId,universalPassword):
     driver = login
     logger = logging.getLogger(__name__)
