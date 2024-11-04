@@ -5,4 +5,8 @@ __pycache__/
 pytest_cache/
 
 # Ignore virtual environment directory
-venv/
+.venv/
+
+# Ignore allure-result
+allure-results/
+
