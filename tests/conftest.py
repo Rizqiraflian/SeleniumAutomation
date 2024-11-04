@@ -1,22 +1,32 @@
 import pytest
-from selenium_helpers import create_driver,logging
+from selenium_helpers import create_driver,logging,os,allure
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import random
 import uuid
 
-#Setup Log
-
-def pytest_configure(config):
-    # Clear existing handlers to prevent duplication
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
+#----------------------------Called Test case -------------------------------
 
 @pytest.fixture(scope="function")
 def driver():
     driver = create_driver()  # Create a new WebDriver instance
     yield driver               # Provide the driver to the tests
     driver.quit()             # Quit the driver after tests complete
+
+@pytest.fixture
+def capture_screenshot(driver):
+    """Fixture to capture a screenshot."""
+    def _capture_screenshot(test_name):
+        """Capture a screenshot and save it to the specified path."""
+        screenshot_dir = "screenshots"
+        if not os.path.exists(screenshot_dir):
+            os.makedirs(screenshot_dir)  # Create the directory if it doesn't exist
+
+        screenshot_path = os.path.join(screenshot_dir, f"{test_name}.png")
+        driver.save_screenshot(screenshot_path)
+        allure.attach.file(screenshot_path, name=test_name, attachment_type=allure.attachment_type.PNG)
+
+    return _capture_screenshot  # Return the inner function
 
 
 @pytest.fixture(scope="function")
@@ -35,7 +45,6 @@ def login(driver):
     login_button = driver.find_element(By.XPATH, "//button[@type='submit']")
     login_button.click()
     return driver
-
 
 #--------------------------------------- General Function---------------------------------------#
 @pytest.fixture(scope="function")
@@ -70,3 +79,15 @@ def generate_employeeId():
 @pytest.fixture(scope="session")
 def universalPassword():
     return "temp1234"
+
+@pytest.fixture(scope="session")
+def adminUsername():
+    return "Admin"
+
+@pytest.fixture(scope="session")
+def adminPassword():
+    return "admin123"
+
+@pytest.fixture(scope="session")
+def admin_wrongUsername():
+    return "wrongAdmin"

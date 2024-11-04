@@ -6,6 +6,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import logging
 import time
+import allure
+import os
 
 # Function to set up the WebDriver
 def create_driver():
