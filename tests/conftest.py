@@ -1,10 +1,16 @@
 import pytest
-from selenium_helpers import create_driver
+from selenium_helpers import create_driver,logging
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import random
 import uuid
 
+#Setup Log
+
+def pytest_configure(config):
+    # Clear existing handlers to prevent duplication
+    for handler in logging.root.handlers[:]:
+        logging.root.removeHandler(handler)
 
 @pytest.fixture(scope="function")
 def driver():
@@ -31,7 +37,7 @@ def login(driver):
     return driver
 
 
-# General Function
+#--------------------------------------- General Function---------------------------------------#
 @pytest.fixture(scope="function")
 def generate_random_first_name():
     first_names = ["Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Hannah", "Ivan", "Julia", "Kyle"]
@@ -59,6 +65,8 @@ def generate_employeeId():
     # Convert UUID to string and get the first 4 characters
     return str(random_uuid)[:4]
 
+
+#-----------------------------------Global Variable------------------------------#
 @pytest.fixture(scope="session")
 def universalPassword():
     return "temp1234"
