@@ -30,20 +30,22 @@ def capture_screenshot(driver):
 
 
 @pytest.fixture(scope="function")
-def login(driver):
-    # Open the website
-    driver.get("https://opensource-demo.orangehrmlive.com")
-    # Set an implicit wait
-    driver.implicitly_wait(10)  # Wait up to 10 seconds for elements to appear
-    # Locate and fill in the username
-    username_field = driver.find_element(By.NAME, "username")
-    username_field.send_keys("Admin")
-    # Locate and fill in the password
-    password_field = driver.find_element(By.NAME, "password")
-    password_field.send_keys("admin123")
-    # Locate and click the login button
-    login_button = driver.find_element(By.XPATH, "//button[@type='submit']")
-    login_button.click()
+def login(driver,adminUsername,adminPassword):
+    with allure.step("Access orangeHRMDemo website"):
+            driver.get("https://opensource-demo.orangehrmlive.com")
+            # Set an implicit wait
+            driver.implicitly_wait(10)  # Wait up to 10 seconds for elements to appear
+    with allure.step("Input admin username {adminUsername} with password {adminPassword}"):
+        # Locate and fill in the username
+        username_field = driver.find_element(By.NAME, "username")
+        username_field.send_keys(adminUsername)
+        # Locate and fill in the password
+        password_field = driver.find_element(By.NAME, "password")
+        password_field.send_keys(adminPassword)
+    with allure.step("click login button"):    
+        # Locate and click the login button
+        login_button = driver.find_element(By.XPATH, "//button[@type='submit']")
+        login_button.click()
     return driver
 
 #--------------------------------------- General Function---------------------------------------#

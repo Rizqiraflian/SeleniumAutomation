@@ -11,8 +11,6 @@ class TestLogin:
     def test_login_success(self, driver,adminUsername,adminPassword,capture_screenshot):
         with allure.step("Access orangeHRMDemo website"):
             driver.get("https://opensource-demo.orangehrmlive.com")
-            # Set an implicit wait
-            driver.implicitly_wait(10)  # Wait up to 10 seconds for elements to appear
         with allure.step("Input admin username {adminUsername} with password {adminPassword}"):
             # Locate and fill in the username
             username_field = driver.find_element(By.NAME, "username")
