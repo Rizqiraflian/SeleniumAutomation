@@ -94,21 +94,3 @@ def globalVariable():
         "adminPassword": "admin123",
         "dummyUsername": "dummyAdmin"
     }
-
-
-
-@pytest.fixture(scope="session")
-def universalPassword():
-    return "temp1234"
-
-@pytest.fixture(scope="session")
-def adminUsername():
-    return "Admin"
-
-@pytest.fixture(scope="session")
-def adminPassword():
-    return "admin123"
-
-@pytest.fixture(scope="session")
-def admin_wrongUsername():
-    return "wrongAdmin"
