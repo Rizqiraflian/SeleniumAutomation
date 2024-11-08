@@ -13,3 +13,5 @@ allure-results/
 # Ignore screenshots folder
 screenshots/
 
+# Ignore helper folder
+helper/
