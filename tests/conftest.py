@@ -1,3 +1,4 @@
+import shutil
 import pytest
 from selenium_helpers import create_driver,logging,os,allure
 from selenium import webdriver
@@ -10,8 +11,17 @@ import uuid
 @pytest.fixture(scope="function")
 def driver():
     driver = create_driver()  # Create a new WebDriver instance
+    driver.implicitly_wait(10)
     yield driver               # Provide the driver to the tests
     driver.quit()             # Quit the driver after tests complete
+
+@pytest.fixture(scope='session', autouse=True)
+def clean_allure_results():
+    allure_results_dir = './allure-results'
+    if os.path.exists(allure_results_dir):
+        shutil.rmtree(allure_results_dir)
+    os.makedirs(allure_results_dir)
+    print(f"Allure results folder cleaned before the test run: {allure_results_dir}")
 
 @pytest.fixture
 def capture_screenshot(driver):
@@ -30,23 +40,19 @@ def capture_screenshot(driver):
 
 
 @pytest.fixture(scope="function")
-def login(driver,adminUsername,adminPassword):
-    with allure.step("Access orangeHRMDemo website"):
-            driver.get("https://opensource-demo.orangehrmlive.com")
-            # Set an implicit wait
-            driver.implicitly_wait(10)  # Wait up to 10 seconds for elements to appear
-    with allure.step("Input admin username {adminUsername} with password {adminPassword}"):
+def login(driver, globalVariable):
+    def login_user(username, password):
+        driver.get("https://opensource-demo.orangehrmlive.com")
         # Locate and fill in the username
         username_field = driver.find_element(By.NAME, "username")
-        username_field.send_keys(adminUsername)
+        username_field.send_keys(globalVariable["adminUsername"])
         # Locate and fill in the password
         password_field = driver.find_element(By.NAME, "password")
-        password_field.send_keys(adminPassword)
-    with allure.step("click login button"):    
+        password_field.send_keys(globalVariable["adminPassword"])  
         # Locate and click the login button
         login_button = driver.find_element(By.XPATH, "//button[@type='submit']")
         login_button.click()
-    return driver
+    return login_user
 
 #--------------------------------------- General Function---------------------------------------#
 @pytest.fixture(scope="function")
@@ -78,6 +84,19 @@ def generate_employeeId():
 
 
 #-----------------------------------Global Variable------------------------------#
+
+@pytest.fixture(scope="session")
+def globalVariable():
+    # Define and initialize the global variable(s)
+    return {
+        "universalPassword": "temp1234",
+        "adminUsername": "Admin",
+        "adminPassword": "admin123",
+        "dummyUsername": "dummyAdmin"
+    }
+
+
+
 @pytest.fixture(scope="session")
 def universalPassword():
     return "temp1234"

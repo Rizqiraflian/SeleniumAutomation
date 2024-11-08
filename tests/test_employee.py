@@ -11,8 +11,10 @@ class TestEmployee:
     
     @allure.title(" add new employee")
     @allure.severity(allure.severity_level.CRITICAL)
-    def test_success_add_employee(self,login,generate_random_first_name,generate_random_middle_name,generate_random_last_name,generate_employeeId,universalPassword,capture_screenshot):
-        driver = login
+    def test_success_add_employee(self,driver,login,generate_random_first_name,generate_random_middle_name,generate_random_last_name,generate_employeeId,globalVariable,capture_screenshot):
+        # Use the login fixture to log in
+        login(globalVariable["adminUsername"], globalVariable["adminPassword"])
+
         #--------------
         # access employee menu
         with allure.step("Access PIM menu"):
@@ -81,12 +83,12 @@ class TestEmployee:
         ## set text password
         with allure.step("input password value {input_password}"):
             input_password = driver.find_element(By.XPATH, "(//input[@type='password'])[1]")
-            input_password.send_keys(universalPassword)
+            input_password.send_keys(globalVariable["universalPassword"])
             
         ## set text confirm password
         with allure.step("input password value {input_confirmPassword}"):
             input_confirmPassword = driver.find_element(By.XPATH, "(//input[@type='password'])[2]")
-            input_confirmPassword.send_keys(universalPassword)
+            input_confirmPassword.send_keys(globalVariable["universalPassword"])
 
         #-------------
         # Upload image feature
